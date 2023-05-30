@@ -1,0 +1,40 @@
+<html>
+{% load static %}
+<head>
+    <title>Payment Page|Online Grocery</title>
+   
+</head>
+<body>
+  <main class="container">
+    <div class="main">
+      <!-- Payment Method Section  -->
+    
+
+      </section>
+      <!-- Order Summary Section  -->
+      <section class="order_summary">
+        <h2 class="order_head">Order Summary</h2>
+        <div class="order_price">
+          <hr />
+          {% for i in order %}
+          <div class="price">
+            <p>Order price:</p>
+            <p>Rs.{{i.total}}</p>
+          </div>
+         
+          
+         
+          <hr />
+          <div class="total_price">
+            <p class="dark">Total:</p>
+            <p class="dark">Rs.{{i.total}}</p>
+          </div>
+        </div>
+       {%endfor%}
+        <button class="review_btn">Review and Confirm</button>
+      </section>
+    </div>
+  </main>
+</body>
+
+</html>

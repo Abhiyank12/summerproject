@@ -1,0 +1,73 @@
+
+
+
+{% extends 'admin-base.html' %}
+{% block main %}
+
+<div class="card shadow">
+    <div class="card-body">
+        <h5 class="p-2" style="border-bottom: 2px solid orange;">Update Product</h5>
+        <div class="container-fluid">
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Product Name</label>
+                            <input type="text" name="name" class="form-control" value="{{product.name}}" placeholder="Product Name">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Product description</label>
+                            <input type="text" name="name" class="form-control" value="{{product.description}}" placeholder="Category Name">
+                        </div>
+                    </div>
+                </div>
+                  <div class="form-row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Produt Image</label>
+                            <input type="text" name="name" class="form-control" value="{{product.image}}" placeholder="Product Name">
+                        </div>
+                    </div>
+                         <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Produt Quantity</label>
+                            <input type="number" name="name" class="form-control" value="{{product.quantity}}" placeholder="Product Name">
+                        </div>
+                    </div>
+                    </div>
+                    <div class="form-row">
+                    <div class="col-sm-6">
+                         <div class="form-group">
+                            <label>Produt Price</label>
+                            <input type="number" name="name" class="form-control" value="{{product.price}}" placeholder="Product Name">
+                        </div>
+                    </div>
+                     <div class="col-sm-6">
+                         <div class="form-group">
+                            <label>Produt mfg</label>
+                            <input type="date" name="name" class="form-control" value="{{roduct.mfgdate}}" placeholder="Product Name">
+                        </div>
+                    </div>
+                    </div>
+                     <div class="form-row">
+                    <div class="col-sm-6">
+                         <div class="form-group">
+                            <label>Produt expdate</label>
+                            <input type="date" name="name" class="form-control" value="{product.expdate}" placeholder="Product Name">
+                        </div>
+                    </div></div>
+                <input type="submit" value="Submit" class="m-2 px-3 btn btn-primary">
+            </form>
+        </div>
+    </div>
+</div>
+
+{% if msg %}
+<script>
+    alert('{{msg}}')
+</script>
+{% endif %}
+{% endblock %}
