@@ -1,0 +1,125 @@
+{% load static %}
+<html>
+<head>
+    <title>Booking</title>
+    <script src="https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js"></script>
+</head>
+</head>
+<style>
+    label{
+        color:black;
+    }
+</style>
+<body>
+{% include 'navigation.html' %}
+<hr class="mt-0">
+<div class="card shadow m-5" id="signupform">
+    <div class="card-body">
+        <div class="container-fluid">
+            <h5 class="p-2" style="border-bottom: 2px solid orange;color:green">Confirm Booking Detail</h5>
+            <form method="post" name="booking">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="fname">First Name</label>
+                            <input type="text" name="fname" id="fname" placeholder="Enter First Name" value="{{user.user.first_name}}" readonly class="form-control"
+                                   pattern="[A-Za-z]+">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" name="lname" value="{{user.user.last_name}}" placeholder="Enter Last Name" readonly class="form-control"
+                                   pattern="[A-Za-z]+">
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Email ID</label>
+                            <input type="email" name="email" placeholder="Email Address" value="{{user.user.username}}" readonly required class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="contact">Contact</label>
+                            <input type="text" name="mobile" placeholder="Contact Number" value="{{user.phoneno}}" readonly required
+                                   class="form-control">
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Address</label>
+                            <textarea name="address" class="form-control" placeholder="Full Address" readonly>{{user.address}}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Total Price(Rs.)</label>
+                            <input type="text" name="total" class="form-control" value="{{total}}" readonly>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </form>
+              <button id="payment-button" class="m-2 px-3 btn btn-primary">Pay with Khalti</button>
+        </div>
+    </div>
+</div>
+
+    <!-- Place this where you need payment button -->
+    <!-- Paste this code anywhere in you body tag -->
+    <script>
+     function verifyPayment(payload) {
+        $.ajax({
+            url: "{% url 'verify_payment' %}",
+            type: "POST",
+            data: payload,
+            dataType: 'json',
+            success: function (response) { alert(response) },
+            error: function (error) { alert(error.responseJSON['message']) }
+        });
+    }
+
+        var config = {
+            // replace the publicKey with yours
+            "publicKey": "test_public_key_dd8a321878ff4fbd8a6015c2b925f25b",
+            "productIdentity": "1234567890",
+            "productName": "Dragon",
+            "productUrl": "http://gameofthrones.wikia.com/wiki/Dragons",
+            "paymentPreference": [
+                "KHALTI",
+                "EBANKING",
+                "MOBILE_BANKING",
+                "CONNECT_IPS",
+                "SCT",
+                ],
+            "eventHandler": {
+                onSuccess (payload) {
+                    // hit merchant api for initiating verfication
+                    console.log(payload);
+                },
+                onError (error) {
+                    console.log(error);
+                },
+                onClose () {
+                    console.log('widget is closing');
+                }
+            }
+        };
+
+        var checkout = new KhaltiCheckout(config);
+        var btn = document.getElementById("payment-button");
+        btn.onclick = function () {
+            // minimum transaction amount must be 10, i.e 1000 in paisa.
+            checkout.show({amount: 1000});
+        }
+    </script>
+</body>
+</html>

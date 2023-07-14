@@ -1,0 +1,43 @@
+{% extends "admin-base.html" %}
+{% block main %}
+<div class="card shadow">
+<div class="card-body">
+<h5 class="p-2"style="border-bottom: 2px solid Violet;">All Products  </h5>
+<div class="container-fluid">
+<table class="table table-bordered table-sm">
+<thead>
+<tr>
+<th>S.No</th>
+<th>Name</th>
+<th>Description</th>
+<th>Image</th>
+<th>Quantity</th>
+<th>Price</th>
+<th>Mfg.date</th>
+<th>Exp.date</th>
+
+</tr>
+</thead>
+{% for i in product %}
+<tbody>
+<tr>
+<th>{{forloop.counter}}</th>
+<th>{{i.name}}</th>
+<td>{{i.description | safe}}</td>
+<th><img src="{{i.image.url}}" width=50px/></th>
+<th>{{i.quantity}}</th>
+<th>{{i.price}}</th>
+<th>{{i.mfgdate}}</th>
+<th>{{i.expdate}}</th>
+ <td>
+                        <a href="/epro/{{i.id}}/" class="text-success">Edit</a>
+                        <a href="/dpro/{{i.id}}/" class="text-danger"
+                           onclick="return confirm('Are You Sure?')">Delete</a></td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,102 @@
+
+{% extends 'navigation.html' %}
+{% load static %}
+{% block body %}
+<link rel="stylesheet" href="{% static 'css/contact.css' %}">
+<style>
+    
+    .carousel-caption {
+        background-color: rgba(0,0,0,0.5);
+    }
+h4{
+  text-align:center;
+}
+</style>
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+  </ol>
+  <div class="carousel-inner">
+    {% for i in data %}
+        <div class="carousel-item {% if forloop.counter == 1 %}active{% endif %}">
+          <img class="d-block w-100" src="{{i.image.url}}" alt="{{i.title}}" height="500px">
+          <div class="carousel-caption d-none d-md-block">
+          
+          </div>
+        </div>
+    {% endfor %}
+
+  </div>
+  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+
+
+     {% comment %} footer section {% endcomment %}
+     
+      <section class="section1 clearfix">
+      <div class="textcenter">
+        <h1 class="shtext">Members</h1>
+        <span class="seperator"></span>
+        </div><span> 
+        <div>
+        
+         <img src="/static/img/ceo.jpg"  style="float:left;width:150px;margin:50;">
+       <span>  <h2> Ceo</h2></span>
+         <span class="seperator"></span>
+         <div style="margin:30;">Miss. Alina Adhikari is 24 years old energetic entreprenuer
+         .Master's degree in Business Administration (MBA) with a focus on Operations Management.
+         Excellent leadership abilities, able to inspire and motivate teams to achieve common goals.
+         Strong communication skills, adept at conveying complex concepts to both technical and non-technical stakeholders.
+Visionary mindset, constantly seeking opportunities for growth and staying ahead of market trends.
+Decisive and strategic thinker, capable of making sound business judgments.
+Embraces a collaborative approach, fostering a positive and inclusive work culture.
+Demonstrates resilience and adaptability in the face of challenges, finding creative solutions to problems.
+         
+         </div>
+         
+    </section>
+       <img src="/static/img/md.jpg"  style="float:right;width:150px;margin:50;">
+       <span>  <h2 style="margin:30;text-align:center;" > Managing Director</h2></span>
+         <span class="seperator"></span>
+         <div style="margin:30;">    Over 20 years of experience in executive leadership positions, including roles as CEO and Managing Director.
+    Served as Managing Director in reputable organizations across multiple industries, including finance, technology, and manufacturing.
+    Successfully led companies through periods of growth, transformation, and increased profitability.
+    Implemented strategic initiatives to drive operational efficiency, cost reduction, and revenue growth.
+    Built and maintained strong relationships with clients, stakeholders, and industry partners.
+    Proven expertise in mergers and acquisitions, having led and executed several successful deals.
+    Implemented robust financial management systems and processes, ensuring accurate reporting and compliance.
+    Skilled in managing cross-functional teams and fostering a collaborative work culture.
+    Actively involved in industry associations and networks, staying updated on market trends and best practices.
+    Effective in crisis management and risk mitigation, making informed decisions under pressure.
+</div>
+         
+    </section>
+      <section class="footer" style="background-color:grey;">   <div style="color:white;text-align:center;margin:10;">
+           <h5>Contact </h5>
+           <div style="color:white;">
+            <p><span class="collig">Phone :</span> 9868017933</p>
+            <p><span class="collig">Email :</span>lish@gmail.com </p>
+            <p><span class="collig">Fax :</span> 01-52825</p>
+      </div>
+      </div>
+    
+    </section>
+     
+        
+
+     
+  <div class="lastSection">
+       <p class="info" style="text-align:Center" >  Copyright <span>&copy; </span>Lish 2020 </p>
+  </div>
+
+
+{% endblock %}

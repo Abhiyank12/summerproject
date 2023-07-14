@@ -1,0 +1,99 @@
+{% extends 'admin-base.html' %}
+{% block main %}
+<script>
+
+function fillExpiryDate() {
+    // Get the current date
+    var mfgdate = new Date();
+
+    // Add 30 days to the current date
+    var expdate = new Date(mfgDate.getTime() + 30 * 24 * 60 * 60 * 1000);
+
+    // Format the expiry date as 'YYYY-MM-DD'
+    
+    var formattedExpiryDate = expdate.toISOString().slice(0, 10);
+
+    // Set the value of the expiry date field
+    document.getElementById("expdate").value = formattedExpiryDate;
+    return;
+}
+
+
+</script>
+
+<div class="card shadow">
+    <div class="card-body">
+        <h5 class="p-2" style="border-bottom: 2px solid orange;">Add Product</h5>
+        <div class="container-fluid">
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Product Category</label>
+                            <select name="category" class="form-control" required>
+                                <option value="">Choose Category</option>
+                                {% for i in Category %}
+                                <option value="{{i.id}}">{{i.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Product Name</label>
+                            <input type="text" name="name" class="form-control" placeholder="Product Name" required>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Product Description</label>
+                            <input type="text" name="description" class="form-control" placeholder="Product description" required>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Product Image</label>
+                            <input type="file" name="image" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Quantity</label>
+                               <input type="number" name="quantity" class="form-control" required>
+                        </div>
+                    </div>
+                
+                <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Price</label>
+                            <input type="number" name="price" class="form-control" required>
+                        </div>
+                    </div>
+                
+                <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Mfg.date</label>
+                            <input type="date" name="mfgdate" class="form-control" required onchange="fillExpiryDate()">
+                        </div>
+                    </div>
+               
+                <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>Exp.date</label>
+                           <input type="date" name="expdate" class="form-control" required>
+                        </div>
+                    </div>
+             
+                
+
+
+                <input type="submit" value="Submit" class="m-2 px-3 btn btn-primary" >
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
