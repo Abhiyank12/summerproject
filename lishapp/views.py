@@ -6,10 +6,16 @@ from django.http import JsonResponse
 import json
 from django.views.decorators.csrf import csrf_exempt
 import requests
+import pprint 
+from datetime import datetime
+from django.shortcuts import render
+from .models import Booking
+from django.http import HttpResponse
 
+# from weasyprint import HTML
 # Create your views here.
 def home(request):
-    return render(request,"home.html")
+    return render(request,"index.html")
 
 def index(request):
     data = Carousel.objects.all()
@@ -113,7 +119,6 @@ def addproduct(request):
        expdate = request.POST['expdate']
        catobj = category.objects.get(id=cat)
        Product.objects.create(name=name,description=description,category=catobj,image=image,quantity=quantity,price=price,mfgdate=mfgdate,expdate=expdate)
-    
        messages.success(request,"product added")
        return redirect('dashboard-vproduct')
     return render(request,"addproduct.html",locals())
@@ -147,7 +152,7 @@ def dpro(request,pid):
 def adminlogout(request):
     logout(request)
     messages.success(request,"logout sucessfully")
-    return redirect('main')
+    return redirect('index')
 
 #userregis
 def userregis(request):
@@ -160,12 +165,11 @@ def userregis(request):
         mobile = request.POST['phone_no'] 
         if UserProfile.objects.filter(phoneno=mobile).exists():
            messages.error(request,"phone number alreasy exits")
-     
-        else:
-         user =User.objects.create_user(username=email,last_name=lname,first_name=fname,password=password)
-         UserProfile.objects.create(user=user,address=address,phoneno=mobile,email=email)
-         user.save()
-         messages.success(request,"user registered sucessfully")
+        
+        user =User.objects.create_user(username=email,last_name=lname,first_name=fname,password=password)
+        UserProfile.objects.create(user=user,address=address,phoneno=mobile)
+        user.save()
+        messages.success(request,"user registered sucessfully")
     return render(request,'userregist.html',locals())
 
 def ulogin(request):
@@ -176,7 +180,7 @@ def ulogin(request):
         if user:
             login(request,user)
             messages.success(request,"login sucessful")
-            return redirect('main')
+            return redirect('index')
         else:
             messages.error(request,"invalid user")
     return render(request, 'login.html', locals())
@@ -184,7 +188,7 @@ def ulogin(request):
 def logoutuser(request):
     logout(request)
     messages.success(request,"logout sucessfully")
-    return redirect('main')
+    return redirect('index')
 
 def userprofile(request):
     data = UserProfile.objects.get(user = request.user)
@@ -201,26 +205,6 @@ def userprofile(request):
         return redirect('userprofile')
     return render(request, 'profile.html', locals())
 
-def changepass(request):
-    if request.method=="POST":
-        o = request.POST['currentpassword']
-        n = request.POST['newpassword']
-        c = request.POST['confirmpassword']
-        user = authenticate(name= request.user.username,password=o)
-        if user:
-            if n == c:
-                user.set_password(n)
-                user.save()
-                messages.success(request, "Password Changed")
-                return redirect('main')
-           
-            else:
-                messages.success(request, "Password mnot matched")
-                return redirect('change_password')
-        else:
-            mag="Invalid Password"
-            return redirect('change_password')
-    return render(request, 'change_password.html')
 
 def user_product(request,pid):
     if pid==0:
@@ -325,7 +309,6 @@ def booking(request):
          cart.product = {'objects':[]}
          cart.save()
          messages.success(request, "Book Order Successfully")
-         
     return render(request, "booking.html", locals())
 
 def myOrder(request):
@@ -341,27 +324,19 @@ def change_order_status(request, pid):
         messages.success(request, "Order status changed.")
     return redirect('myorder')
 
-def admin_changepass(request):
-    if request.method == 'POST':
-        o = request.POST.get('currentpassword')
-        n = request.POST.get('newpassword')
-        c = request.POST.get('confirmpassword')
-        user = authenticate(username=request.user.username, password=o)
-        if user:
-            if n == c:
-                user.set_password(n)
-                user.save()
-                messages.success(request, "Password Changed")
-                return redirect('dashboard')
-            else:
-                messages.success(request, "Password not matching")
-                return redirect('admin_changepass')
-        else:
-            messages.success(request, "Invalid Password")
-            return redirect('admin_changepass')
-    return render(request, 'adminpass.html')
 
 def manage_order(request):
+    if request.method == 'POST':
+        start_date_str = request.POST.get('start_date')
+        end_date_str = request.POST.get('end_date')
+        start_date = datetime.strptime(start_date_str, "%Y-%m-%d")
+        end_date = datetime.strptime(end_date_str, "%Y-%m-%d")
+        
+        date_diff = end_date - start_date
+        
+        orders = Booking.objects.filter(created__range=[start_date, end_date])
+        
+        return render(request, 'manage_order.html', {'order': orders, 'date_diff': date_diff})
     action = request.GET.get('action', 0)
     order = Booking.objects.filter(status=int(action))
     order_status = ORDERSTATUS[int(action)-1][1]
@@ -374,7 +349,7 @@ def delete_order(request, pid):
     order = Booking.objects.get(id=pid)
     order.delete()
     messages.success(request, 'Order Deleted')
-    return redirect('delete_order')
+    return redirect('manage-order')
 
 @csrf_exempt
 def verify_payment(request):
@@ -394,25 +369,15 @@ def verify_payment(request):
    
 
    response = requests.post(url, payload, headers = headers)
-   messages.success(request, 'Order Deleted')
-   return redirect('cart')
+   response_data = json.loads(response.text)
+   status_code = str(response.status_code)
+   if status_code == '400':
+        response = JsonResponse({'status':'false','message':response_data['detail']}, status=500)
+        return response
+
+   import pprint 
+   pp = pprint.PrettyPrinter(indent=4)
+   pp.pprint(response_data)
    
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
+   return JsonResponse(f"Payment Done !! With IDX. {response_data['user']['idx']}",safe=False)
 

@@ -29,7 +29,7 @@ urlpatterns = [
     path('logout/',views.logoutuser,name='logout'),
     path('dashboard/adminlogout/',views.adminlogout,name="dashboard-adminlogout"),
     path('userprofile',views.userprofile,name="userprofile"),
-    path('change-password/',views.changepass, name="change_password"),
+   
     path('user-product/<int:pid>/', views.user_product, name="user_product"),
     path('product-detail/<int:pid>/', views.product_detail, name="product_detail"),
     path('add-to-cart/<int:pid>/', views.addToCart, name="addToCart"),
@@ -41,10 +41,11 @@ urlpatterns = [
     path('booking/',views. booking, name="booking"),
     path('order/', views.myOrder, name="myorder"),
     path('change-order-status/<int:pid>/', views.change_order_status, name="change_order_status"),
-    path('admin_changepass/',views.admin_changepass,name="admin_chamgepass"),
+   
    path('manage-order/', views.manage_order, name="manage-order"), 
    path('delete-order/<int:pid>/', views.delete_order, name="delete_order"),
    path('payment/',views.payment, name="payment"), 
-  path('api/verify_payment',views.verify_payment,name='verify_payment')
+  path('api/verify_payment',views.verify_payment,name='verify_payment'),
+   
    
     ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
